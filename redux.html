@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="https://unpkg.com/redux@latest/dist/redux.min.js"></script>
+	<style>
+*{
+	margin:0;
+	padding:0;
+}
+ul{
+	display: flex;
+	    justify-content: space-around;
+}
+li{
+	list-style: none;
+}
+button{
+	width: 120px;
+	height: 40px;
+	line-height: 40px;
+	text-align: center;
+	background-color: #f6f6f6;
+	color:#333;
+	border:none;
+	outline: none;
+}
+.imgWrap{
+	padding:20px 40px;
+	text-align: center;
+}
+
+.round{
+	border-radius:50%;
+}
+.square{
+	border-radius: 10px;
+}
+.big{
+	width: 400px;
+}
+.small{
+	width: 200px;
+}
+
+
+	</style>
+</head>
+<body>
+	<ul>
+		<li><button id="round">ROUND</button></li>
+		<li><button id="square">SQUARE</button></li>
+		<li><button id="big">BIG</button></li>
+		<li><button id="small">SMALL</button></li>
+	</ul>
+	<div class="imgWrap">
+		<img src="http://img.reretu.com/2017/05/16/2884bed3a05aed2a_300x300.jpg" alt="" id="img">
+	
+	</div>
+<script>
+//params
+const RandS = 'roundANDsquare';
+const BandS = 'bigANDsmall';
+const RandSfilter = {
+	TOROUND :'round',
+	TOSQUARE : 'square'
+}
+const BandSfilter = {
+	TOBIG :'big',
+	TOSMALL : 'small'
+}
+
+
+//action
+const setRandS = (filter)=>{
+	return{
+		type : RandS,
+		filter
+	}
+}
+const setBandS = (filter)=>{
+	return{
+		type : BandS,
+		filter
+	}
+}
+
+//reducer
+const deft = {
+	classBandS : 'big',
+	classRandS : 'round'
+}
+const reducerRS = (state = deft, action)=>{
+	switch(action.type){
+		case BandS:
+			return Object.assign({},state,{
+			 	classBandS : action.filter
+			 });
+		case RandS:
+			return Object.assign({},state,{
+			 	classRandS : action.filter
+			 });
+		default:
+		return state;
+	}
+}
+
+//store
+const store = Redux.createStore(reducerRS)
+
+const render = ()=>{
+	const a = store.getState();	
+	console.log(a)
+	document.getElementById('img').className = a.classBandS + ' '+a.classRandS;
+}
+render()
+
+store.subscribe(render)
+document.getElementById('round')
+	.addEventListener('click',()=>{
+		store.dispatch(setRandS(RandSfilter.TOROUND))
+	})
+document.getElementById('square')
+	.addEventListener('click',()=>{
+		store.dispatch(setRandS(RandSfilter.TOSQUARE))
+	})
+document.getElementById('big')
+	.addEventListener('click',()=>{
+		store.dispatch(setBandS(BandSfilter.TOBIG))
+	})
+document.getElementById('small')
+	.addEventListener('click',()=>{
+		store.dispatch(setBandS(BandSfilter.TOSMALL))
+	})
+
+</script>
+
+</body>
+</html>
